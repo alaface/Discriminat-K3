@@ -1,15 +1,15 @@
 //DiscriminantGroup
 //Input: a matrix with integer coefficients
-//Output: its discriminant group
+//Output: its discriminant group and the quadratic form in Q/2Z
 
 function DiscriminantGroup(M)
- S,A,B:=SmithForm(M);
- l:=[[S[i,i],i]: i in [1..NumberOfColumns(S)]| S[i,i] notin {0,1}];
- sA:=Matrix(Rationals(),ColumnSubmatrixRange(B,l[1][2],l[#l][2]));
+ S,A,B := SmithForm(M);
+ l := [[S[i,i],i]: i in [1..NumberOfColumns(S)]| S[i,i] notin {0,1}];
+ sA := Matrix(Rationals(),ColumnSubmatrixRange(B,l[1][2],l[#l][2]));
  for i in [1..#l] do
   MultiplyColumn(~sA,1/l[i][1],i);
  end for;
- Q:=Transpose(sA)*Matrix(Rationals(),M)*sA;
+ Q := Transpose(sA)*Matrix(Rationals(),M)*sA;
  for i,j in [1..NumberOfColumns(Q)] do
   if i ne j then
    Q[i,j] := Q[i,j]-Floor(Q[i,j]);
@@ -45,7 +45,7 @@ end function;
 //Output: the null elements of its discriminant group
 
 IsotropicElements := function(M)
- v,U := disc(M);
+ v,U := DiscriminantGroup(M);
  Q := Rationals();
  A := AbelianGroup(v);
  return [Eltseq(a) : a in A | MatrixMod2(Matrix(Q,1,#v,Eltseq(a))*U*Matrix(Q,#v,1,Eltseq(a)))[1,1] eq 0];
