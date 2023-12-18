@@ -1,0 +1,52 @@
+//DiscriminantGroup
+//Input: a matrix with integer coefficients
+//Output: its discriminant group
+
+function DiscriminantGroup(M)
+ S,A,B:=SmithForm(M);
+ l:=[[S[i,i],i]: i in [1..NumberOfColumns(S)]| S[i,i] notin {0,1}];
+ sA:=Matrix(Rationals(),ColumnSubmatrixRange(B,l[1][2],l[#l][2]));
+ for i in [1..#l] do
+  MultiplyColumn(~sA,1/l[i][1],i);
+ end for;
+ Q:=Transpose(sA)*Matrix(Rationals(),M)*sA;
+ for i,j in [1..NumberOfColumns(Q)] do
+  if i ne j then
+   Q[i,j] := Q[i,j]-Floor(Q[i,j]);
+  else
+   Q[i,j] := Q[i,j]-Floor(Q[i,j])+ (Floor(Q[i,j]) mod 2);
+  end if;
+ end for;
+ return [l[i][1]: i in [1..#l]], Q;
+end function;
+
+//MatrixMod2
+//Input: a matrix with rational coefficients
+//Output: its entries modulo 2
+
+MatrixMod2 := function(Q);
+ if Type(Q) eq AlgMatElt then 
+  for i,j in [1..Nrows(Q)] do
+   if i ne j then Q[i,j] := Q[i,j]-Floor(Q[i,j]);
+   else Q[i,j] := Q[i,j]-2*Floor(Q[i,j]/2);
+   end if;
+  end for;
+ else if Type(Q) eq ModTupFldElt then 
+  for i in [1..#Eltseq(Q)] do
+    Q[i] := Q[i]-2*Floor(Q[i]/2);
+  end for;
+ end if;
+ end if;
+ return Q;
+end function;
+
+//IsotropicElements
+//Input: a matrix with integer coefficients
+//Output: the null elements of its discriminant group
+
+IsotropicElements := function(M)
+ v,U := disc(M);
+ Q := Rationals();
+ A := AbelianGroup(v);
+ return [Eltseq(a) : a in A | MatrixMod2(Matrix(Q,1,#v,Eltseq(a))*U*Matrix(Q,#v,1,Eltseq(a)))[1,1] eq 0];
+end function;
