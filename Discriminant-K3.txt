@@ -25,18 +25,11 @@ end function;
 //Output: its entries modulo 2
 
 MatrixMod2 := function(Q);
- if Type(Q) eq AlgMatElt then 
-  for i,j in [1..Nrows(Q)] do
-   if i ne j then Q[i,j] := Q[i,j]-Floor(Q[i,j]);
-   else Q[i,j] := Q[i,j]-2*Floor(Q[i,j]/2);
-   end if;
-  end for;
- else if Type(Q) eq ModTupFldElt then 
-  for i in [1..#Eltseq(Q)] do
-    Q[i] := Q[i]-2*Floor(Q[i]/2);
-  end for;
- end if;
- end if;
+ for i,j in [1..Nrows(Q)] do
+  if i ne j then Q[i,j] := Q[i,j]-Floor(Q[i,j]);
+  else Q[i,j] := Q[i,j]-2*Floor(Q[i,j]/2);
+  end if;
+ end for;
  return Q;
 end function;
 
