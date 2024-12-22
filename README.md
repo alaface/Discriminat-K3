@@ -8,7 +8,7 @@ This repository contains functions for computing the discriminant group of a mat
 - **Input:** A matrix with integer coefficients.
 - **Output:** 
   1. The discriminant group as a list of integers.
-  2. The quadratic form in $\mathbb{Q}/2\mathbb{Z}$.
+  2. The quadratic form with values in $\mathbb{Q}/2\mathbb{Z}$.
 
 This function calculates the discriminant group of a given integer matrix using the Smith Normal Form, and computes the quadratic form in a reduced basis.
 
