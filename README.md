@@ -46,10 +46,24 @@ These functions are designed to work together to compute properties of discrimin
 M := Matrix(Integers(), [[0, 1, 0], [1, 0, 0], [0, 0, -12]]);
 Q := Matrix(Integers(), [[-2, 1, 0], [1, -2, 0], [0, 0, 4]]);
 
-// Compare discriminants and quadratic forms
+// Step 1: Compute discriminant group and quadratic form for M
+DG_M, QF_M := DiscriminantGroup(M);
+print "Discriminant Group of M:", DG_M;
+print "Quadratic Form of M:", QF_M;
+
+// Step 2: Compute discriminant group and quadratic form for Q
+DG_Q, QF_Q := DiscriminantGroup(Q);
+print "Discriminant Group of Q:", DG_Q;
+print "Quadratic Form of Q:", QF_Q;
+
+// Step 3: Compare discriminant groups and quadratic forms
 isEquivalent := CompareDiscriminants(M, Q);
 if isEquivalent then
     print "The discriminant groups and quadratic forms are equivalent.";
 else
     print "The discriminant groups and quadratic forms are not equivalent.";
 end if;
+
+// Step 4: Find isotropic elements of M
+isotropicElements := IsotropicElements(M);
+print "Isotropic Elements of M:", isotropicElements;
