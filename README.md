@@ -24,23 +24,32 @@ This utility function reduces the entries of a matrix modulo 2, ensuring compati
 
 This function identifies the isotropic elements of the discriminant group by testing quadratic form values for nullity modulo 2.
 
+### `CompareDiscriminants(M, Q)`
+- **Input:** 
+  - `M`: A matrix with integer coefficients.
+  - `Q`: Another matrix with integer coefficients.
+- **Output:** `true` if the discriminant group and quadratic form of `M` and `Q` are equivalent, `false` otherwise.
+
+This function compares the discriminant groups and quadratic forms of two matrices. It determines whether there exists an automorphism of the discriminant group that transforms the quadratic form of `M` into that of `Q`.
+
 ## Usage
 
 These functions are designed to work together to compute properties of discriminant groups derived from integer matrices. The workflow typically involves:
 1. Using `DiscriminantGroup` to obtain the discriminant group and quadratic form.
 2. Utilizing `IsotropicElements` to find isotropic vectors in the group.
+3. Using `CompareDiscriminants` to check equivalence between two matrices.
 
 ## Example
 
 ```magma
-// Example matrix
-M := Matrix(Integers(), [[2, 1], [1, 2]]);
+// Example matrices
+M := Matrix(Integers(), [[0, 1, 0], [1, 0, 0], [0, 0, -12]]);
+Q := Matrix(Integers(), [[-2, 1, 0], [1, -2, 0], [0, 0, 4]]);
 
-// Compute discriminant group and quadratic form
-DG, QF := DiscriminantGroup(M);
-print "Discriminant Group:", DG;
-print "Quadratic Form:", QF;
-
-// Find isotropic elements
-iso := IsotropicElements(M);
-print "Isotropic Elements:", iso;
+// Compare discriminants and quadratic forms
+isEquivalent := CompareDiscriminants(M, Q);
+if isEquivalent then
+    print "The discriminant groups and quadratic forms are equivalent.";
+else
+    print "The discriminant groups and quadratic forms are not equivalent.";
+end if;
