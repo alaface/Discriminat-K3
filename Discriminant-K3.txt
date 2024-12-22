@@ -56,3 +56,35 @@ IsotropicElements := function(M);
     return [Eltseq(a) : a in A | 
             MatrixMod2(Matrix(Q, 1, #v, Eltseq(a)) * U * Matrix(Q, #v, 1, Eltseq(a)))[1, 1] eq 0];
 end function;
+
+// CompareDiscriminants
+// Input: Two matrices M and Q with integer coefficients
+// Output: True if the discriminant group and quadratic form of M and Q are equivalent, false otherwise
+
+CompareDiscriminants := function(M, Q)
+    // Compute the discriminant group and quadratic form for M
+    v, U := DiscriminantGroup(M);
+    // Compute the discriminant group and quadratic form for Q
+    w, D := DiscriminantGroup(Q);
+
+    // If the discriminant groups have different orders, return false
+    if v ne w then 
+        return false;
+    end if;
+
+    // Create an abelian group from the discriminant group
+    A := AbelianGroup(v);
+    // Compute the automorphism group of A
+    Aut := AutomorphismGroup(A);
+    // Obtain the permutation representation of the automorphism group
+    f, G := PermutationRepresentation(Aut);
+    h := Inverse(f); // Inverse map for automorphisms
+
+    // Compute the matrices representing automorphisms
+    ll := [Matrix(Rationals(), [Eltseq((h(g))(A.i)) : i in [1..Ngens(A)]]) : g in G];
+    // Apply each automorphism to the quadratic form and reduce modulo 2
+    dd := [MatrixMod2(a * U * Transpose(a)) : a in ll];
+
+    // Check if the quadratic form of Q is equivalent to any transformed form of M
+    return D in dd;
+end function;
